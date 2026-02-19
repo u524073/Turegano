@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Turégano en tu bolsillo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #f3f4f6;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .app {
+      background: #ffffff;
+      width: 100%;
+      max-width: 430px;
+      border-radius: 24px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 90vh;
+    }
+
+    .app-header {
+      padding: 16px 18px 10px;
+      background: linear-gradient(135deg, #f97316, #ec4899);
+      color: #fff;
+    }
+
+    .app-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .app-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .app-subtitle {
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.4);
+      backdrop-filter: blur(6px);
+    }
+
+    .hero {
+      margin-top: 10px;
+      border-radius: 16px;
+      padding: 10px 12px;
+      background: rgba(15,23,42,0.35);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .hero-img {
+      width: 64px;
+      height: 64px;
+      border-radius: 14px;
+      background-image: url("https://images.pexels.com/photos/6271443/pexels-photo-6271443.jpeg?auto=compress&cs=tinysrgb&w=800");
+      background-size: cover;
+      background-position: center;
+      flex-shrink: 0;
+      border: 2px solid rgba(248,250,252,0.9);
+    }
+
+    .hero-text h2 {
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    .hero-text p {
+      font-size: 0.78rem;
+      line-height: 1.2;
+      opacity: 0.95;
+    }
+
+    .tabs {
+      display: flex;
+      overflow-x: auto;
+      padding: 10px 10px 6px;
+      gap: 8px;
+      background: #f9fafb;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .tab {
+      flex-shrink: 0;
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      background: #e5e7eb;
+      color: #4b5563;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .tab.active {
+      background: #111827;
+      color: #f9fafb;
+      border-color: #111827;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.35);
+    }
+
+    .content {
+      padding: 14px 16px 10px;
+      overflow-y: auto;
+      flex: 1;
+      font-size: 0.85rem;
+      color: #111827;
+    }
+
+    .section {
+      display: none;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .section h3 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    .section p {
+      margin-bottom: 8px;
+      line-height: 1.45;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.7rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4338ca;
+      margin-bottom: 12px;
+    }
+
+    .card {
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      background: #ffffff;
+      box-shadow: 0 10px 24px rgba(15,23,42,0.03);
+    }
+
+    .card-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .card-sub {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .chip {
+      font-size: 0.7rem;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #4b5563;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .btn {
+      flex: 1 1 45%;
+      text-align: center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      font-size: 0.8rem;
+      background: #f9fafb;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .btn.primary {
+      background: #111827;
+      color: #f9fafb;
+      border-color: #111827;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .tagline {
+      font-size: 0.7rem;
+      color: #9ca3af;
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(4px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    /* Scrollbar pequeño dentro de la app */
+    .content::-webkit-scrollbar {
+      width: 5px;
+    }
+    .content::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="app-header-top">
+        <div>
+          <div class="app-title">Turégano en tu bolsillo</div>
+          <div class="app-subtitle">Guía rápida del castillo y la villa</div>
+        </div>
+        <span class="badge">Segovia · Castilla y León</span>
+      </div>
+      <div class="hero">
+        <div class="hero-img" aria-hidden="true"></div>
+        <div class="hero-text">
+          <h2>Castillo &amp; plaza mayor</h2>
+          <p>
+            Descubre el castillo-iglesia de San Miguel, la plaza porticada y
+            los mejores sitios para comer y dormir en Turégano.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab active" data-target="historia">Historia</button>
+      <button class="tab" data-target="lugares">Lugares</button>
+      <button class="tab" data-target="comer">Dónde comer</button>
+      <button class="tab" data-target="dormir">Dónde dormir</button>
+      <button class="tab" data-target="telefonos">Teléfonos</button>
+    </nav>
+
+    <main class="content">
+      <!-- HISTORIA -->
+      <section id="historia" class="section active">
+        <span class="pill">Turégano · Introducción</span>
+        <h3>Un pueblo al abrigo de su castillo</h3>
+        <p>
+          Turégano es una villa de la provincia de Segovia, situada entre los
+          valles de los ríos Pirón y Cega. Su silueta está marcada por el
+          <strong>castillo de Turégano</strong>, una fortaleza del siglo XII
+          levantada sobre la iglesia románica de San Miguel Arcángel.
+        </p>
+        <p>
+          La historia del lugar se remonta, al menos, a época romana: en el
+          paraje del Prado del Burgo se han encontrado restos de una posible
+          villa del Bajo Imperio. Más tarde, sobre un antiguo castro y una
+          fortificación anterior, se desarrolló el castillo actual, muy
+          reformado en el siglo XV por el obispo Arias Dávila.
+        </p>
+        <p>
+          A lo largo de los siglos fue refugio episcopal, escenario de
+          conflictos señoriales y también prisión, lo que ha dejado un rico
+          legado de leyendas y episodios históricos.
+        </p>
+      </section>
+
+      <!-- LUGARES DE INTERÉS -->
+      <section id="lugares" class="section">
+        <span class="pill">Qué ver</span>
+        <h3>Imprescindibles de Turégano</h3>
+
+        <article class="card">
+          <div class="card-title">Castillo de Turégano</div>
+          <div class="card-sub">Fortaleza-iglesia (s. XII–XV)</div>
+          <p>
+            Emblema del pueblo, se alza sobre un cerro dominando toda la villa.
+            Integra en su interior la iglesia de San Miguel, creando un
+            conjunto casi único en Castilla. Desde sus torres se obtienen
+            vistas panorámicas de la campiña segoviana.
+          </p>
+          <div class="chip-row">
+            <span class="chip">Visita guiada</span>
+            <span class="chip">Mañanas y fines de semana</span>
+            <span class="chip">Vistas 360º</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-title">Plaza Mayor · Plaza de los Cien Postes</div>
+          <div class="card-sub">Plaza porticada con vistas al castillo</div>
+          <p>
+            Una plaza medieval porticada donde se concentran bares, restaurantes
+            y comercios tradicionales. Desde aquí se contempla una de las
+            mejores perspectivas del castillo, especialmente al atardecer.
+          </p>
+          <div class="chip-row">
+            <span class="chip">Soportales</span>
+            <span class="chip">Ambiente local</span>
+            <span class="chip">Terrazas</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-title">Calles antiguas y entorno</div>
+          <div class="card-sub">Paseo entre casas de piedra y pinares</div>
+          <p>
+            Un paseo por las calles que suben al castillo permite descubrir
+            fachadas de piedra, antiguas casonas y miradores. En el entorno de
+            la villa destacan los pinares y rutas por la campiña segoviana.
+          </p>
+          <div class="chip-row">
+            <span class="chip">Fotografía</span>
+            <span class="chip">Paseos cortos</span>
+          </div>
+        </article>
+      </section>
+
+      <!-- DÓNDE COMER -->
+      <section id="comer" class="section">
+        <span class="pill">Gastronomía</span>
+        <h3>Dónde comer en Turégano</h3>
+        <p>
+          La especialidad estrella es el <strong>cordero lechal asado</strong>,
+          preparado en horno de leña, junto con cochinillo, sopas castellanas y
+          postres caseros. Muchos asadores se concentran en la plaza y sus
+          alrededores.
+        </p>
+
+        <article class="card">
+          <div class="card-title">Asador tradicional en la plaza</div>
+          <div class="card-sub">Cocina castellana · Horno de leña</div>
+          <p>
+            Restaurante centenario situado bajo los soportales de la plaza
+            mayor. Famoso por su lechazo y su ambiente familiar. Ideal para
+            una comida después de visitar el castillo.
+          </p>
+          <div class="chip-row">
+            <span class="chip">Lechazo asado</span>
+            <span class="chip">Menús de grupo</span>
+            <span class="chip">Reservas recomendadas</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-title">Bares y terrazas</div>
+          <div class="card-sub">Raciones y tapas</div>
+          <p>
+            En la plaza y calles adyacentes encontrarás bares donde tomar un
+            vino, una cerveza artesana local y raciones típicas (torreznos,
+            croquetas, embutidos…).
+          </p>
+          <div class="chip-row">
+            <span class="chip">Tapas</span>
+            <span class="chip">Terraza</span>
+          </div>
+        </article>
+
+        <p class="tagline">
+          Tip: en temporada alta (fines de semana y festivos) conviene reservar.
+        </p>
+      </section>
+
+      <!-- DÓNDE DORMIR -->
+      <section id="dormir" class="section">
+        <span class="pill">Alojamiento</span>
+        <h3>Dónde dormir en Turégano</h3>
+        <p>
+          La oferta se basa sobre todo en <strong>casas rurales</strong> y
+          pequeños hoteles con encanto, tanto en el núcleo de Turégano como en
+          pedanías y pueblos cercanos.
+        </p>
+
+        <article class="card">
+          <div class="card-title">Casa rural “Los Halcones”</div>
+          <div class="card-sub">Alquiler completo · Jardín y piscina</div>
+          <p>
+            Conjunto de dos casas independientes en un gran jardín de unos
+            2000 m², con piscina, zona infantil y barbacoa. Situada a las
+            afueras del pueblo, ideal para grupos y familias.
+          </p>
+          <div class="chip-row">
+            <span class="chip">Grupos grandes</span>
+            <span class="chip">Piscina</span>
+            <span class="chip">Jardín</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-title">Otras casas rurales</div>
+          <div class="card-sub">En Turégano y alrededores</div>
+          <p>
+            En el municipio y su entorno hay varias casas rurales y alojamientos
+            con encanto, muchas de ellas orientadas a escapadas de fin de
+            semana y turismo de naturaleza.
+          </p>
+          <div class="chip-row">
+            <span class="chip">Escapadas románticas</span>
+            <span class="chip">Grupos de amigos</span>
+          </div>
+        </article>
+
+        <p class="tagline">
+          Consejo: compara precios y disponibilidad en portales de reserva antes de ir.
+        </p>
+      </section>
+
+      <!-- TELÉFONOS ÚTILES -->
+      <section id="telefonos" class="section">
+        <span class="pill">Información práctica</span>
+        <h3>Teléfonos útiles</h3>
+        <p>
+          Los siguientes números son <strong>ejemplos</strong>. Sustitúyelos por
+          los datos oficiales del ayuntamiento o la oficina de turismo cuando
+          pases de mockup a app real.
+        </p>
+
+        <article class="card">
+          <div class="card-title">Emergencias</div>
+          <div class="btn-row">
+            <a class="btn primary" href="tel:112">112 · Emergencias</a>
+            <a class="btn" href="tel:062">062 · Guardia Civil</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-title">Información local</div>
+          <div class="btn-row">
+            <a class="btn" href="tel:+34921000000">Ayuntamiento</a>
+            <a class="btn" href="tel:+34921000001">Oficina de turismo</a>
+            <a class="btn" href="tel:+34921000002">Centro de salud</a>
+            <a class="btn" href="tel:+34921000003">Taxi / traslados</a>
+          </div>
+        </article>
+
+        <p class="tagline">
+          Pulsa sobre un botón para llamar directamente desde tu móvil.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll(".tab");
+    const sections = document.querySelectorAll(".section");
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        // Activar pestaña
+        tabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+
+        // Mostrar sección
+        const target = tab.getAttribute("data-target");
+        sections.forEach(sec => {
+          sec.classList.toggle("active", sec.id === target);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
